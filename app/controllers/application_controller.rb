@@ -27,6 +27,18 @@ class ApplicationController < ActionController::Base
   end
 
   def calculate_payment
+    @int = params.fetch("APR").to_f
+    @interest = @int/100
+    @int = @int.to_s(:percentage)
+    @interest = @interest/12
+    @years = params.fetch("number_years").to_f
+    @months = @years*12
+    @years = @years.round()
+    @pv = params.fetch("present_value").to_f
+    @payment = (@interest*@pv)/(1-(1+@interest)**(-@months))
+    #@payment = @payment.round()
+    #@payment = @payment.to_f
+
     render({ :template => "calculation_templates/payment_results.html.erb"})
   end
 
